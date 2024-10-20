@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question 1</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+            const userIdInput = document.querySelector('input[name="UserName"]');
+            const passwordInput = document.querySelector('input[name="Password"]');
+            const errorUserId = document.getElementById('errorUserId');
+            const errorPassword = document.getElementById('errorPassword');
+            const strengthIndicator = document.getElementById('strengthIndicator');
+            const submitButton = document.querySelector('button[type="submit"]');
+
+            userIdInput.addEventListener('input', function(){
+                if(userIdInput.value.trim() === ""){
+                    errorUserId.textContent = "User ID is required.";
+                }
+                else if(userIdInput.value.length < 4){
+                    errorUserId.textContent = "User ID must be at least 4 characters long.";
+                }
+                else{
+                    errorUserId.textContent = "";
+                }
+                validateForm();
+            });
+
+            passwordInput.addEventListener('input', function(){
+                const passwordValue = passwordInput.value;
+
+                if(passwordValue.trim() === ""){
+                    errorPassword.textContent = "Password is required.";
+                } 
+                else if(passwordValue.length < 6){
+                    errorPassword.textContent = "Password must be at least 6 characters long.";
+                } 
+                else{
+                    errorPassword.textContent = "";
+                }
+                checkPasswordStrength(passwordValue);
+                validateForm();
+            });
+
+            function checkPasswordStrength(password) {
+                const strengthLevels = ["Weak", "Moderate", "Strong"];
+                let strength = 0;
+
+                if (password.length >= 6) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+                if(strength === 1){
+                    strengthIndicator.textContent = "Strength: " + strengthLevels[0];
+                    strengthIndicator.style.color = "red";
+                }
+                else if(strength === 2){
+                    strengthIndicator.textContent = "Strength: " + strengthLevels[1];
+                    strengthIndicator.style.color = "orange";
+                } 
+                else if(strength >= 3){
+                    strengthIndicator.textContent = "Strength: " + strengthLevels[2];
+                    strengthIndicator.style.color = "green";
+                } 
+                else{
+                    strengthIndicator.textContent = "";
+                }
+            }
+
+            function validateForm(){
+                const isUserIdValid = userIdInput.value.trim() !== "" && userIdInput.value.length >= 4;
+                const isPasswordValid = passwordInput.value.trim() !== "" && passwordInput.value.length >= 6;
+
+                if(isUserIdValid && isPasswordValid){
+                    submitButton.disabled = false;
+                } 
+                else{
+                    submitButton.disabled = true;
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="heading">
+            <h1>User Registration</h1>
+        </div>
+    </header>
+
+    <form action="">
+        <div class="body">
+            <div class="login">
+                <div class="create">
+                    <h2>Create an Account</h2>
+                </div>
+                <div class="UserID">
+                    <h3>User Id</h3>
+                    <div class="UNinput">
+                        <p><input type="text" name="UserName"  placeholder="Enter your User ID" required></p>
+                    </div>
+                </div>
+    
+                <div class="Password">
+                    <div class="Pinput">
+                        <h3>Password</h3>
+                        <p><input type="password" name="Password"  placeholder="Enter your Password" required></p>
+                        <p id="errorPassword" style="color: red;"></p>
+                    </div>
+                    <p id="strengthIndicator" style="color: red;"></p>
+                </div>
+                <div class="submit">
+                    <button type="submit" disabled>Create Account</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
